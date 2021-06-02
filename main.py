@@ -1,8 +1,5 @@
 import json
 import os
-from pprint import pprint
-
-from tqdm import tqdm
 from github import Github
 from credentials import GITHUB_TOKEN, root_path
 
@@ -117,11 +114,7 @@ for reponame in tqdm(repo_data.keys()):
                     date = event['created_at'].replace(":", "-") if 'created_at' in event.keys() else event[
                         'submitted_at'].replace(":", "-")
                 elif 'actor' in event.keys():
-                    try:
-                        username = event["actor"]["login"]
-                    except:
-                        pprint(event)
-                        quit()
+                    username = event["actor"]["login"]
                     date = event['created_at'].replace(":", "-") if 'created_at' in event.keys() else event[
                         'submitted_at'].replace(":", "-")
                 else:
