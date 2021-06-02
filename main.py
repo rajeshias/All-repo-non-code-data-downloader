@@ -1,5 +1,8 @@
 import json
 import os
+import time
+import requests.exceptions
+from tqdm import tqdm
 from github import Github
 from credentials import GITHUB_TOKEN, root_path
 
@@ -46,10 +49,15 @@ for repo in repos:
     issues = repo.get_issues(state='all')
     issues_number_list = []
     timelineis = {}
-    print('getting issues and pulls...')
+    print('\ngetting issues and pulls...')
     for issue in tqdm(issues):
         # issue_events = issue.get_events()
-        timelineis[issue.number] = [issue.raw_data] + [events.raw_data for events in issue.get_timeline()]
+        try:
+            timelineis[issue.number] = [issue.raw_data] + [events.raw_data for events in issue.get_timeline()]
+        except requests.exceptions.ReadTimeout:
+            print('timeout error.. retrying!!')
+            time.sleep(5)
+            timelineis[issue.number] = [issue.raw_data] + [events.raw_data for events in issue.get_timeline()]
         issues_number_list.append(issue.number)
     pulls = repo.get_pulls(state='all')
     pulls_numbers_list = []
@@ -114,7 +122,10 @@ for reponame in tqdm(repo_data.keys()):
                     date = event['created_at'].replace(":", "-") if 'created_at' in event.keys() else event[
                         'submitted_at'].replace(":", "-")
                 elif 'actor' in event.keys():
-                    username = event["actor"]["login"]
+                    if 'login' in event['actor']:
+                        username = event["actor"]["login"]
+                    else:
+                        username = 'None'
                     date = event['created_at'].replace(":", "-") if 'created_at' in event.keys() else event[
                         'submitted_at'].replace(":", "-")
                 else:
