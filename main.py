@@ -70,29 +70,28 @@ for repo in repos:
 
 response = ''
 
-while response != 'n':
-    try:
-        os.mkdir(os.path.join(root_path, orgInput.lower()))  # org folder creation
-        root_path = root_path + '\\' + orgInput.lower()
-        folders = [reponame for reponame in repo_data.keys()]
-        for folder in folders:
-            os.mkdir(os.path.join(root_path, folder))  # repo folder creation
-            os.mkdir(os.path.join(root_path + '\\' + folder, 'issues'))  # issues folder creation
-            os.mkdir(os.path.join(root_path + '\\' + folder, 'pr'))  # PR folder creation
-        break
-    except FileExistsError:
-        print("org dir already exists. Please delete the prev dir, or move it to somewhere else")
-        quit()
+try:
+    os.mkdir(os.path.join(root_path, orgInput.lower()))  # org folder creation
+    root_path = root_path + '\\' + orgInput.lower()
+    folders = [reponame for reponame in repo_data.keys()]
+    for folder in folders:
+        os.mkdir(os.path.join(root_path, folder))  # repo folder creation
+        os.mkdir(os.path.join(root_path + '\\' + folder, 'issues'))  # issues folder creation
+        os.mkdir(os.path.join(root_path + '\\' + folder, 'pr'))  # PR folder creation
+    break
+except FileExistsError:
+    print("org dir already exists. Please delete the prev dir, or move it to somewhere else")
+    quit()
 
-        ''' shutil rmtree could be potentially risky.
-        Especially if mistake was made by client in giving the root path
-        so commented it out'''
-        # response = input(f'File Already exists. Do you want to overwrite {orgInput.lower()}?(y/n)').lower()
-        # if response == 'y':
-        #     shutil.rmtree(root_path + '\\' + orgInput.lower())
-        # elif response == 'n':
-        #     print('-----aborted-----')
-        #     quit()
+    ''' shutil rmtree could be potentially risky.
+    Especially if mistake was made by client in giving the root path
+    so commented it out'''
+    # response = input(f'File Already exists. Do you want to overwrite {orgInput.lower()}?(y/n)').lower()
+    # if response == 'y':
+    #     shutil.rmtree(root_path + '\\' + orgInput.lower())
+    # elif response == 'n':
+    #     print('-----aborted-----')
+    #     quit()
 
 # write repo meta data & create pr+issues folder
 
