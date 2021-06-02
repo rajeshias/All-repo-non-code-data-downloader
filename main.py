@@ -78,7 +78,6 @@ try:
         os.mkdir(os.path.join(root_path, folder))  # repo folder creation
         os.mkdir(os.path.join(root_path + '\\' + folder, 'issues'))  # issues folder creation
         os.mkdir(os.path.join(root_path + '\\' + folder, 'pr'))  # PR folder creation
-    break
 except FileExistsError:
     print("org dir already exists. Please delete the prev dir, or move it to somewhere else")
     quit()
