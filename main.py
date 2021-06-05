@@ -52,17 +52,12 @@ if not repos:
 
 create_new_folder(root_path, name)
 
-repo_data = {}
-issues_data = {}
-pr_data = {}
 for i, repo in enumerate(repos):
     print(f'loading ---{repo.name}---({i + 1}/{repos.totalCount})')
     create_new_folder(os.path.join(root_path, name), repo.name)
     print("getting repo data...")
     write_data(os.path.join(root_path, name, repo.name, 'repo_meta_data.json'), repo.raw_data)
     issues = repo.get_issues(state='all')
-    issues_number_list = []
-    timelineis = {}
     print('getting issues and pulls...')
     create_new_folder(os.path.join(root_path, name, repo.name), 'issues')
     create_new_folder(os.path.join(root_path, name, repo.name), 'pr')
